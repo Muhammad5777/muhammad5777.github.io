@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=3000px, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<title>Blueprint Grid</title>
+<style>
+  body {
+    background: url(ARC_Raiders_KeyArt_Background_01.jpg) no-repeat center/cover;
+    font-family: "Barlow", sans-serif;
+    font-weight: 600;
+    color: #ece2d0;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 75px;
+    font-weight: 800;
+    margin: 0 auto 20px;
+    width: 3000px;
+  }
+
+  .blueprint-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 12px;
+    margin: auto;
+    width: 3000px;
+  }
+
+  .blueprint-item {
+    border: 5px solid #ece2d0;
+    border-radius: 10px;
+    display:flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    padding: 8px;
+    aspect-ratio: 1;
+    box-sizing: border-box;
+
+    position: relative;
+    cursor: pointer;
+  }
+
+  .blueprint-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  .blueprint-item img {
+    width: 80%;
+    aspect-ratio: 1;
+    object-fit: contain;
+    background: url(Blueprint_Background.svg) no-repeat center/cover;
+  }
+
+  .blueprint-name {
+    font-size: 25px;
+    line-height: 1.2;
+    min-height: 2.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .blueprint-item .overlay-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-45deg);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 2;
+    font-size: 70px;
+    font-weight: bold;
+    -webkit-text-stroke: 2px black;
+  }
+
+  .blueprint-item.selling {
+    background-color: rgba(255, 41, 30, 0.9);
+  }
+
+  .blueprint-item.buying {
+    background-color: rgba(53, 110, 53, 0.9);
+  }
+</style>
+</head>
+
+<body>
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const items = [...document.querySelectorAll('.blueprint-item')];
+
+  items.forEach((item, index) => {
+    const state = localStorage.getItem("bp_state_" + index);
+    const imageContainer = item.querySelector('.blueprint-image');
+
+    if (!state || state === "none") return;
+
+    let overlay = imageContainer.querySelector('.overlay-text');
+    if (!overlay) {
+      overlay = document.createElement('div');
+      overlay.className = 'overlay-text';
+      imageContainer.appendChild(overlay);
+    }
+
+    if (state === "selling") {
+      item.classList.add('selling');
+      overlay.textContent = "Selling";
+      overlay.style.opacity = 1;
+    }
+
+    if (state === "buying") {
+      item.classList.add('buying');
+      overlay.textContent = "Buying";
+      overlay.style.opacity = 1;
+    }
+  });
+});
+
+document.addEventListener('click', (e) => {
+  const items = [...document.querySelectorAll('.blueprint-item')];
+  const item = e.target.closest('.blueprint-item');
+  if (!item) return;
+
+  const index = items.indexOf(item);
+  const imageContainer = item.querySelector('.blueprint-image');
+
+  let overlay = imageContainer.querySelector('.overlay-text');
+  if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.className = 'overlay-text';
+    imageContainer.appendChild(overlay);
+  }
+
+  let newState = "none";
+
+  if (!item.classList.contains('selling') && !item.classList.contains('buying')) {
+    item.classList.add('selling');
+    overlay.textContent = "Selling";
+    overlay.style.opacity = 1;
+    newState = "selling";
+  } else if (item.classList.contains('selling')) {
+    item.classList.remove('selling');
+    item.classList.add('buying');
+    overlay.textContent = "Buying";
+    overlay.style.opacity = 1;
+    newState = "buying";
+  } else {
+    item.classList.remove('buying');
+    overlay.textContent = "";
+    overlay.style.opacity = 0;
+    newState = "none";
+  }
+
+  localStorage.setItem("bp_state_" + index, newState);
+});
+</script>
+
+
+
+
+
+<h1>Blueprints</h1>
+<div class="blueprint-grid">
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/a/ac/Bettina.png">                       </div> <div class="blueprint-name">Bettina                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cc/Blue_Light_Stick.png">              </div> <div class="blueprint-name">Blue Light Stick              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/8/88/Aphelion.png">                      </div> <div class="blueprint-name">Aphelion                      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/b/bb/Combat_Mk._3_(FLANKING).png">       </div> <div class="blueprint-name">Combat Mk. 3 (Flanking)       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/b/bb/Combat_Mk._3_(AGGRESSIVE).png">     </div> <div class="blueprint-name">Combat Mk. 3 (Aggressive)     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/3/3d/Complex_Gun_Parts.png">             </div> <div class="blueprint-name">Complex Gun Parts             </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cc/Blue_Light_Stick.png">              </div> <div class="blueprint-name">Green Light Stick             </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/3/37/Looting_Mk._3_(SURVIVOR).png">      </div> <div class="blueprint-name">Looting Mk. 3 (Survivor)      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/2b/Angled_Grip_II.png">                </div> <div class="blueprint-name">Angled Grip II                </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/0/0f/Angled_Grip_III.png">               </div> <div class="blueprint-name">Angled Grip III               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/b/ba/Hullcracker-Level1.png">            </div> <div class="blueprint-name">Hullcracker                   </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/0/00/Anvil-Level1.png">                  </div> <div class="blueprint-name">Anvil                         </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cb/Barricade_Kit.png">                 </div> <div class="blueprint-name">Barricade Kit                 </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/24/Blaze_Grenade.png">                 </div> <div class="blueprint-name">Blaze Grenade                 </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/a/ae/Osprey-Level1.png">                 </div> <div class="blueprint-name">Osprey                        </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/d/d4/Burletta-Level1.png">               </div> <div class="blueprint-name">Burletta                      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/0/0a/Compensator_II.png">                </div> <div class="blueprint-name">Compensator II                </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/a/af/Compensator_III.png">               </div> <div class="blueprint-name">Compensator III               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/5/5f/Defibrillator.png">                 </div> <div class="blueprint-name">Defibrillator                 </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/9/96/Equalizer.png">                     </div> <div class="blueprint-name">Equalizer                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/2f/Extended_Barrel.png">               </div> <div class="blueprint-name">Extended Barrel               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cf/Extended_Light_Mag_II.png">         </div> <div class="blueprint-name">Extended Light Mag II         </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/4/40/Extended_Light_Mag_III.png">        </div> <div class="blueprint-name">Extended Light Mag III        </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/5/50/Extended_Medium_Mag_II.png">        </div> <div class="blueprint-name">Extended Medium Mag II        </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/a/a1/Extended_Medium_Mag_III.png">       </div> <div class="blueprint-name">Extended Medium Mag III       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/4/4f/Extended_Shotgun_Mag_II.png">       </div> <div class="blueprint-name">Extended Shotgun Mag II       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/7/77/Extended_Shotgun_Mag_III.png">      </div> <div class="blueprint-name">Extended Shotgun Mag III      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/f/ff/Remote_Raider_Flare.png">           </div> <div class="blueprint-name">Remote Raider Flare           </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/3/33/Heavy_Gun_Parts.png">               </div> <div class="blueprint-name">Heavy Gun Parts               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/b/b4/Venator-Level1.png">                </div> <div class="blueprint-name">Venator                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/5/50/Il_Toro-Level1.png">                </div> <div class="blueprint-name">Il Toro                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/5/5a/Jolt_Mine.png">                     </div> <div class="blueprint-name">Jolt Mine                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/22/Explosive_Mine.png">                </div> <div class="blueprint-name">Explosive Mine                </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/6/68/Jupiter.png">                       </div> <div class="blueprint-name">Jupiter                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/c9/Light_Gun_Parts.png">               </div> <div class="blueprint-name">Light Gun Parts               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cb/Lightweight_Stock.png">             </div> <div class="blueprint-name">Lightweight Stock             </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/7/77/Lure_Grenade.png">                  </div> <div class="blueprint-name">Lure Grenade                  </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/9/9a/Medium_Gun_Parts.png">              </div> <div class="blueprint-name">Medium Gun Parts              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/1/1e/Torrente-Level1.png">               </div> <div class="blueprint-name">Torrente                      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/23/Muzzle_Brake_II.png">               </div> <div class="blueprint-name">Muzzle Brake II               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/a/a2/Muzzle_Brake_III.png">              </div> <div class="blueprint-name">Muzzle Brake III              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/4/4b/Padded_Stock.png">                  </div> <div class="blueprint-name">Padded Stock                  </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/6/63/Shotgun_Choke_II.png">              </div> <div class="blueprint-name">Shotgun Choke II              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/3/36/Shotgun_Choke_III.png">             </div> <div class="blueprint-name">Shotgun Choke III             </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/4/4d/Shotgun_Silencer.png">              </div> <div class="blueprint-name">Shotgun Silencer              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/1/18/Showstopper.png">                   </div> <div class="blueprint-name">Showstopper                   </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/f/f7/Silencer_I.png">                    </div> <div class="blueprint-name">Silencer I                    </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/c0/Silencer_II.png">                   </div> <div class="blueprint-name">Silencer II                   </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/5/56/Snap_Hook.png">                     </div> <div class="blueprint-name">Snap Hook                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/b/b4/Stable_Stock_II.png">               </div> <div class="blueprint-name">Stable Stock II               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/e/eb/Stable_Stock_III.png">              </div> <div class="blueprint-name">Stable Stock III              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/e/e5/Tagging_Grenade.png">               </div> <div class="blueprint-name">Tagging Grenade               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/c9/Tempest-Level1.png">                </div> <div class="blueprint-name">Tempest                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/0/09/Trigger_Nade.png">                  </div> <div class="blueprint-name">Trigger Nade                  </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/3/3c/Vertical_Grip_II.png">              </div> <div class="blueprint-name">Vertical Grip II              </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/20/Vertical_Grip_III.png">             </div> <div class="blueprint-name">Vertical Grip III             </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/7/7d/Vita_Shot.png">                     </div> <div class="blueprint-name">Vita Shot                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/1/1d/Vita_Spray.png">                    </div> <div class="blueprint-name">Vita Spray                    </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/d/da/Vulcano-Level1.png">                </div> <div class="blueprint-name">Vulcano                       </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/2/24/Wolfpack.png">                      </div> <div class="blueprint-name">Wolfpack                      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cc/Blue_Light_Stick.png">              </div> <div class="blueprint-name">Red Light Stick               </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/d/d5/Smoke_Grenade.png">                 </div> <div class="blueprint-name">Smoke Grenade                 </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://i.postimg.cc/LmBgDt3g/ARC-Raiders-Small-Stacked-Square.png">      </div> <div class="blueprint-name">(Unknown)                     </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/e/e3/Tactical_Mk._3_(DEFENSIVE).png">    </div> <div class="blueprint-name">Tactical Mk. 3 (Defensive)    </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/c8/Tactical_Mk._3_(HEALING).png">      </div> <div class="blueprint-name">Tactical Mk. 3 (Healing)      </div> </div>
+  <div class="blueprint-item">  <div class="blueprint-image"><img src="https://arcraiders.wiki/w/images/c/cc/Blue_Light_Stick.png">              </div> <div class="blueprint-name">Yellow Light Stick            </div> </div>
+</div>
+
+</div>
+
+</body>
+</html>
