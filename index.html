@@ -68,11 +68,53 @@
     justify-content: center;
   }
 
-  .blueprint-item.selling {
+  .blueprint-item.red {
     background-color: rgba(255, 41, 30, 0.9);
   }
 
-  .blueprint-item.buying {
+  .blueprint-item.green {
+    background-color: rgba(53, 110, 53, 0.9);
+  }
+
+
+
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 3000px;
+    margin: 0 auto 20px;
+  }
+
+  .legend {
+    display: flex;
+    gap: 30px;
+    font-size: 50px;
+  }
+
+  .header h1 {
+    margin: 0;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .legend-colour {
+    width: 100px;
+    height: 30px;
+    border-radius: 6px;
+    border: 3px solid #ece2d0;
+  }
+
+  .legend-colour.red {
+    background-color: rgba(255, 41, 30, 0.9);
+  }
+
+  .legend-colour.green {
     background-color: rgba(53, 110, 53, 0.9);
   }
 </style>
@@ -97,17 +139,17 @@ document.addEventListener('click', (e) => {
   const id = item.dataset.id;
   let newState = 'none';
 
-  if (!item.classList.contains('selling') && !item.classList.contains('buying')) {
-    item.classList.add('selling');
-    newState = 'selling';
+  if (!item.classList.contains('red') && !item.classList.contains('green')) {
+    item.classList.add('red');
+    newState = 'red';
 
-  } else if (item.classList.contains('selling')) {
-    item.classList.remove('selling');
-    item.classList.add('buying');
-    newState = 'buying';
+  } else if (item.classList.contains('red')) {
+    item.classList.remove('red');
+    item.classList.add('green');
+    newState = 'green';
 
   } else {
-    item.classList.remove('buying');
+    item.classList.remove('green');
   }
 
   localStorage.setItem(`bp_state_${id}`, newState);
@@ -120,7 +162,22 @@ document.addEventListener('click', (e) => {
 
 
 
-<h1>Blueprints</h1>
+<div class="header">
+  <h1>Blueprints</h1>
+
+  <div class="legend">
+    <div class="legend-item">
+      <span class="legend-colour red"></span>
+      <span>Selling</span>
+    </div>
+    <div class="legend-item">
+      <span class="legend-colour green"></span>
+      <span>Buying</span>
+    </div>
+  </div>
+</div>
+
+
 <div class="blueprint-grid">
   <div class="blueprint-item" data-id="Bettina"                     >  <div class="blueprint-image"> <img src="Blueprint_Images/Bettina.png">                                 </div> <div class="blueprint-name">Bettina                       </div> </div>
   <div class="blueprint-item" data-id="Blue Light Stick"            >  <div class="blueprint-image"> <img src="Blueprint_Images/Blue_Light_Stick.png">                        </div> <div class="blueprint-name">Blue Light Stick              </div> </div>
