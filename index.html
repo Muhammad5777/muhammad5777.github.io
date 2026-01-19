@@ -118,10 +118,8 @@
     background-color: rgba(53, 110, 53, 0.9);
   }
 </style>
-</head>
 
-<body>
-<script>
+  <script>
 window.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.blueprint-item').forEach(item => {
     const id = item.dataset.id;
@@ -155,14 +153,12 @@ document.addEventListener('click', (e) => {
   localStorage.setItem(`bp_state_${id}`, newState);
 });
 </script>
+</head>
 
-
-
-
-
-
-
-<div class="header">
+  
+<body>
+  <div>
+  <div class="header">
   <h1>Blueprints</h1>
 
   <div class="legend">
@@ -254,6 +250,7 @@ document.addEventListener('click', (e) => {
   <div class="blueprint-item" data-id="Tactical Mk. 3 (Defensive)"  >  <div class="blueprint-image"> <img src="Blueprint_Images/Tactical_Mk._3_(Defensive).png">              </div> <div class="blueprint-name">Tactical Mk. 3 (Defensive)    </div> </div>
   <div class="blueprint-item" data-id="Tactical Mk. 3 (Healing)"    >  <div class="blueprint-image"> <img src="Blueprint_Images/Tactical_Mk._3_(Healing).png">                </div> <div class="blueprint-name">Tactical Mk. 3 (Healing)      </div> </div>
   <div class="blueprint-item" data-id="Yellow Light Stick"          >  <div class="blueprint-image"> <img src="Blueprint_Images/Yellow_Light_Stick.png">                      </div> <div class="blueprint-name">Yellow Light Stick            </div> </div>
+</div>
 </div>
 </body>
 </html>
